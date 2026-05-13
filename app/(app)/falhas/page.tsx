@@ -62,109 +62,111 @@ export default function FalhasPage() {
 
   return (
     <div className="p-6 space-y-6 fade-in">
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
         <div>
           <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Cadastro de Falhas</h1>
           <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>Gerencie os tipos de falhas do sistema</p>
         </div>
-        <button onClick={() => openModal()} className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm" style={{ background: 'var(--text-primary)', color: 'var(--bg)' }}>
+        <button onClick={() => openModal()}
+          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderRadius: 12, fontWeight: 600, fontSize: 14, background: 'var(--text-primary)', color: 'var(--bg)', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
           <Plus size={16} /> Nova Falha
         </button>
       </div>
 
-      <div className="flex gap-3" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '16px', padding: '16px' }}>
+      {/* Filters */}
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 16 }}>
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar por código, nome ou categoria..."
-          className="flex-1 bg-transparent text-sm outline-none" style={{ color: 'var(--text-primary)' }} />
+          style={{ flex: 1, minWidth: 200, background: 'transparent', border: 'none', outline: 'none', fontSize: 14, color: 'var(--text-primary)' }} />
         <select value={filterCat} onChange={e => setFilterCat(e.target.value)}
-          className="px-3 py-1 rounded-xl text-sm outline-none"
-          style={{ background: 'var(--bg)', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }}>
+          style={{ padding: '6px 12px', borderRadius: 10, fontSize: 14, outline: 'none', background: 'var(--bg)', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }}>
           <option value="">Todas Categorias</option>
           {CATEGORIAS.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
       </div>
 
+      {/* Table */}
       <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-        <div className="flex items-center gap-2 px-5 py-4" style={{ borderBottom: '1px solid var(--border)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
           <Wrench size={16} style={{ color: 'var(--text-muted)' }} />
-          <span className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>Lista de Falhas ({filtered.length})</span>
+          <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--text-primary)' }}>Lista de Falhas ({filtered.length})</span>
         </div>
-        <table className="w-full text-sm">
-          <thead>
-            <tr style={{ borderBottom: '1px solid var(--border)' }}>
-              {['Código','Nome','Categoria','Status','Ações'].map(h => (
-                <th key={h} className="px-5 py-3 text-left text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map(f => {
-              const cat = catColors[f.categoria] || { bg: 'rgba(100,116,139,0.15)', color: '#64748b' }
-              return (
-                <tr key={f.id} style={{ borderBottom: '1px solid var(--border)' }} className="hover:bg-white/[0.02]">
-                  <td className="px-5 py-3 font-mono font-semibold" style={{ color: 'var(--text-secondary)' }}>{f.codigo}</td>
-                  <td className="px-5 py-3" style={{ color: 'var(--text-primary)' }}>{f.nome}</td>
-                  <td className="px-5 py-3">
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: cat.bg, color: cat.color }}>{f.categoria}</span>
-                  </td>
-                  <td className="px-5 py-3">
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: f.status === 'ativo' ? 'rgba(34,197,94,0.15)' : 'rgba(100,116,139,0.15)', color: f.status === 'ativo' ? 'var(--accent)' : 'var(--text-muted)' }}>
-                      {f.status === 'ativo' ? 'Ativo' : 'Inativo'}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3">
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => openModal(f)} className="p-1.5 rounded-lg hover:bg-white/10" style={{ color: 'var(--text-muted)' }}><Pencil size={13} /></button>
-                      <button onClick={() => deleteFalha(f.id)} className="p-1.5 rounded-lg hover:bg-white/10" style={{ color: 'var(--accent-red)' }}><Trash2 size={13} /></button>
-                    </div>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', fontSize: 14, borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                {['Código','Nome','Categoria','Status','Ações'].map(h => (
+                  <th key={h} style={{ padding: '12px 20px', textAlign: 'left', fontSize: 12, fontWeight: 600, color: 'var(--text-muted)' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(f => {
+                const cat = catColors[f.categoria] || { bg: 'rgba(100,116,139,0.15)', color: '#64748b' }
+                return (
+                  <tr key={f.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '12px 20px', fontFamily: 'monospace', fontWeight: 600, color: 'var(--text-secondary)' }}>{f.codigo}</td>
+                    <td style={{ padding: '12px 20px', color: 'var(--text-primary)' }}>{f.nome}</td>
+                    <td style={{ padding: '12px 20px' }}>
+                      <span style={{ fontSize: 12, fontWeight: 600, padding: '4px 10px', borderRadius: 20, background: cat.bg, color: cat.color }}>{f.categoria}</span>
+                    </td>
+                    <td style={{ padding: '12px 20px' }}>
+                      <span style={{ fontSize: 12, fontWeight: 600, padding: '4px 10px', borderRadius: 20, background: f.status === 'ativo' ? 'rgba(34,197,94,0.15)' : 'rgba(100,116,139,0.15)', color: f.status === 'ativo' ? 'var(--accent)' : 'var(--text-muted)' }}>
+                        {f.status === 'ativo' ? 'Ativo' : 'Inativo'}
+                      </span>
+                    </td>
+                    <td style={{ padding: '12px 20px' }}>
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button onClick={() => openModal(f)} style={{ padding: 6, borderRadius: 8, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}><Pencil size={13} /></button>
+                        <button onClick={() => deleteFalha(f.id)} style={{ padding: 6, borderRadius: 8, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent-red)' }}><Trash2 size={13} /></button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
 
+      {/* Modal */}
       {modal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.7)' }}>
-          <div className="w-full max-w-sm rounded-2xl p-6 space-y-4" style={{ background: 'var(--surface)', border: '1px solid var(--border-light)' }}>
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold" style={{ color: 'var(--text-primary)' }}>{modal !== true && modal?.id ? 'Editar Falha' : 'Nova Falha'}</h3>
-              <button onClick={() => setModal(null)} style={{ color: 'var(--text-muted)' }}><X size={18} /></button>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.7)' }}>
+          <div style={{ width: '100%', maxWidth: 420, borderRadius: 20, padding: 24, background: 'var(--surface)', border: '1px solid var(--border-light)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+              <h3 style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{modal !== true && modal?.id ? 'Editar Falha' : 'Nova Falha'}</h3>
+              <button onClick={() => setModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}><X size={18} /></button>
             </div>
-            <div className="space-y-3">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <div>
-                <label className="block text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>Código</label>
+                <label style={{ display: 'block', fontSize: 12, marginBottom: 6, color: 'var(--text-secondary)' }}>Código</label>
                 <input type="number" value={form.codigo} onChange={e => setForm({ ...form, codigo: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl text-sm outline-none"
-                  style={{ background: 'var(--bg)', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }} />
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: 10, fontSize: 14, outline: 'none', background: 'var(--bg)', border: '1px solid var(--border-light)', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
               </div>
               <div>
-                <label className="block text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>Nome</label>
+                <label style={{ display: 'block', fontSize: 12, marginBottom: 6, color: 'var(--text-secondary)' }}>Nome</label>
                 <input value={form.nome} onChange={e => setForm({ ...form, nome: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl text-sm outline-none"
-                  style={{ background: 'var(--bg)', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }} />
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: 10, fontSize: 14, outline: 'none', background: 'var(--bg)', border: '1px solid var(--border-light)', color: 'var(--text-primary)', boxSizing: 'border-box' }} />
               </div>
               <div>
-                <label className="block text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>Categoria</label>
+                <label style={{ display: 'block', fontSize: 12, marginBottom: 6, color: 'var(--text-secondary)' }}>Categoria</label>
                 <select value={form.categoria} onChange={e => setForm({ ...form, categoria: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl text-sm outline-none"
-                  style={{ background: 'var(--bg)', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }}>
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: 10, fontSize: 14, outline: 'none', background: 'var(--bg)', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }}>
                   {CATEGORIAS.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>Status</label>
+                <label style={{ display: 'block', fontSize: 12, marginBottom: 6, color: 'var(--text-secondary)' }}>Status</label>
                 <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl text-sm outline-none"
-                  style={{ background: 'var(--bg)', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }}>
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: 10, fontSize: 14, outline: 'none', background: 'var(--bg)', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }}>
                   <option value="ativo">Ativo</option>
                   <option value="inativo">Inativo</option>
                 </select>
               </div>
             </div>
-            <div className="flex gap-3">
-              <button onClick={() => setModal(null)} className="flex-1 py-2.5 rounded-xl text-sm font-medium" style={{ background: 'var(--bg)', color: 'var(--text-secondary)', border: '1px solid var(--border-light)' }}>Cancelar</button>
-              <button onClick={save} disabled={loading} className="flex-1 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2" style={{ background: 'var(--accent)', color: '#000' }}>
+            <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
+              <button onClick={() => setModal(null)} style={{ flex: 1, padding: '10px', borderRadius: 10, fontSize: 14, fontWeight: 500, background: 'var(--bg)', color: 'var(--text-secondary)', border: '1px solid var(--border-light)', cursor: 'pointer' }}>Cancelar</button>
+              <button onClick={save} disabled={loading} style={{ flex: 1, padding: '10px', borderRadius: 10, fontSize: 14, fontWeight: 600, background: 'var(--accent)', color: '#000', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
                 <Save size={14} /> Salvar
               </button>
             </div>
