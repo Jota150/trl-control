@@ -1,15 +1,12 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
 
-export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
       <Sidebar />
-      <main style={{ flex: 1, overflow: 'auto' }}>{children}</main>
+      <main className="flex-1 overflow-auto">
+        {children}
+      </main>
     </div>
   )
 }
