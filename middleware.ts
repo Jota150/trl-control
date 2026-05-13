@@ -10,7 +10,6 @@ export async function middleware(request: NextRequest) {
     {
       cookies: {
         getAll() { return request.cookies.getAll() },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setAll(cookiesToSet: any[]) {
           cookiesToSet.forEach(({ name, value }: any) => request.cookies.set(name, value))
           supabaseResponse = NextResponse.next({ request })
@@ -20,19 +19,21 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
   const isLoginPage = request.nextUrl.pathname === '/login'
 
-  if (!user && !isLoginPage) {
+  if (!session && !isLoginPage) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
-  if (user && isLoginPage) {
+
+  if (session && isLoginPage) {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
     return NextResponse.redirect(url)
   }
+
   return supabaseResponse
 }
 
